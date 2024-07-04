@@ -57,7 +57,7 @@ jobs:
         id: test-action
         uses: ./
         with:
-          repositories: actions/checkout
+          repository: actions/checkout
 
       - name: Print Output
         id: output
