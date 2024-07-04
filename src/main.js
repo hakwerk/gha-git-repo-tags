@@ -19,7 +19,8 @@ async function run() {
     const [owner, repo] = repoParts
 
     const limit = core.getInput('limit', { required: true })
-    const releasesOnly = core.getBooleanInput('releases-only')
+    const releasesOnly =
+      (core.getInput('releases-only') || 'false').toLowerCase() === 'true'
     const prefix = core.getInput('prefix') || ''
     const regex = core.getInput('regex') || null
     const reverse = core.getBooleanInput('reverse')

@@ -45,8 +45,8 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(4)
-    expect(getBooleanInputMock).toHaveBeenCalledTimes(2)
+    expect(getInputMock).toHaveBeenCalledTimes(5)
+    expect(getBooleanInputMock).toHaveBeenCalledTimes(1)
     //expect(setOutputMock).toHaveBeenCalledTimes(1)
     // expect(setFailedMock).toHaveBeenNthCalledWith(
     //   1,
