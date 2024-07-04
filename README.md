@@ -203,3 +203,10 @@ steps:
     id: output
     run: echo "${{ steps.run-action.outputs.time }}"
 ```
+
+TODO
+
+## References
+
+- https://github.com/actions/javascript-action
+- https://github.com/oprypin/find-latest-tag
