@@ -1,3 +1,5 @@
+// This basically is https://github.com/oprypin/find-latest-tag/blob/master/index.js but modernized and with a few tweaks
+//
 const core = require('@actions/core')
 const github = require('@actions/github')
 
@@ -18,7 +20,7 @@ async function run() {
     }
     const [owner, repo] = repoParts
 
-    const limit = core.getInput('limit', { required: true })
+    const limit = 1 * core.getInput('limit', { required: true })
     const releasesOnly =
       (core.getInput('releases-only') || 'false').toLowerCase() === 'true'
     const prefix = core.getInput('prefix') || ''
@@ -26,9 +28,12 @@ async function run() {
     const reverse =
       (core.getInput('reverse') || 'false').toLowerCase() === 'true'
 
+    const octokit = github.getOctokit(core.getInput('token'))
+
     core.setOutput(
       'tags',
       await getLatestTags(
+        octokit,
         owner,
         repo,
         limit,
@@ -43,9 +48,8 @@ async function run() {
   }
 }
 
-const octokit = github.getOctokit({ auth: core.getInput('token') })
-
 async function getLatestTags(
+  octokit,
   owner,
   repo,
   limit,
@@ -64,7 +68,7 @@ async function getLatestTags(
   })
 
   const tags = []
-  for await (const item of getItemsFromPages(pages)) {
+  for await (const item of getItemsFromPages(octokit, pages)) {
     const tag = releasesOnly ? item['tag_name'] : item['name']
     if (!tag.startsWith(prefix)) {
       continue
@@ -80,17 +84,23 @@ async function getLatestTags(
     if (prefix) {
       error += ` matching "${prefix}*"`
     }
-    throw error
+    throw Object.assign(new Error(error))
   }
-  if (reverse) {
-    tags.reverse()
+
+  // We want to get the most recent tags!
+  tags.reverse()
+
+  const latestTags = tags.slice(-limit)
+
+  if (!reverse) {
+    // reverse the list again unless we WANT it most recent at the top
+    latestTags.reverse()
   }
-  const latestTags = tags.slice(-limit, -1)
 
   return latestTags
 }
 
-async function* getItemsFromPages(pages) {
+async function* getItemsFromPages(octokit, pages) {
   for await (const page of octokit.paginate.iterator(pages)) {
     for (const item of page.data) {
       yield item
@@ -101,7 +111,3 @@ async function* getItemsFromPages(pages) {
 module.exports = {
   run
 }
-
-// TODO: put at TOP
-// This basically is https://github.com/oprypin/find-latest-tag/blob/master/index.js but modernized and with a few tweaks
-//
