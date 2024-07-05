@@ -1,212 +1,83 @@
-# Create a JavaScript Action
+# GitHub Action: git repository tags
 
-[![GitHub Super-Linter](https://github.com/actions/javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/javascript-action/actions/workflows/ci.yml/badge.svg)
+[![GitHub Super-Linter](https://github.com/hakwerk/gha-git-repo-tags/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
+![CI](https://github.com/hakwerk/gha-git-repo-tags/actions/workflows/ci.yml/badge.svg)
+[![cov](https://raw.githubusercontent.com/hakwerk/gha-git-repo-tags/main/badges/coverage.svg)](https://github.com/hakwerk/gha-git-repo-tags/actions)
 
-Use this template to bootstrap the creation of a JavaScript action. :rocket:
+GitHub Action to get last N tags from a repository.
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+## Action I/O
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
+### Inputs
 
-## Create Your Own Action
+- `repository`: Repository name with owner, e.g. 'actions/checkout' (required)
+- `limit`: Number of tags to return (required, default: `10`)
+- `releases-only`: Consider only tags that have an associated release
+- `prefix`: Consider only tags starting with this string prefix
+- `regex`: Consider only tags that matches specified RegEx pattern
+- `reverse`: Reverse the order of the tags returned (oldest first)
+- `token`: Personal access token (auto-populated). It is used only because
+  anonymous requests are rate-limited. It can be overridden to an empty value
 
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
+### Outputs
 
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
+- `tags`: List of the full tag names (incl. prefix) that were found up to the
+  limit
 
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
+### Example
 
-## Initial Setup
-
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
-
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy. If you are using a version manager like
-> [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), you can run `nodenv install` in the
-> root of your repository to install the version specified in
-> [`package.json`](./package.json). Otherwise, 20.x or later should work!
-
-1. :hammer_and_wrench: Install the dependencies
-
-   ```bash
-   npm install
-   ```
-
-1. :building_construction: Package the JavaScript for distribution
-
-   ```bash
-   npm run bundle
-   ```
-
-1. :white_check_mark: Run the tests
-
-   ```bash
-   $ npm test
-
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
-
-   ...
-   ```
-
-## Update the Action Metadata
-
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
-
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
-
-## Update the Action Code
-
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
-
-There are a few things to keep in mind when writing your action code:
-
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.js`, you will see that the action is run in an `async` function.
-
-  ```javascript
-  const core = require('@actions/core')
-  //...
-
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
-
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
-
-So, what are you waiting for? Go ahead and start customizing your action!
-
-1. Create a new branch
-
-   ```bash
-   git checkout -b releases/v1
-   ```
-
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > [!WARNING]
-   >
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
-
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
+An example of how the Action is used would be the following:
 
 ```yaml
 steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v3
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
+  - name: Find latest nginx release tags
+    id: nginx
+    uses: hakwerk/gha-git-repo-tags@v1
     with:
-      milliseconds: 1000
+      repository: nginx/nginx
+      limit: 3
+      reverse: true
 
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+  - name: Print tags
+    run: echo ${{ steps.nginx.outputs.tags }}
 ```
 
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/javascript-action/actions)! :rocket:
-
-## Usage
-
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
+The action can also be used to gather input for a matrix workflow job:
 
 ```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
+jobs:
+  get_tags:
+    runs-on: ubuntu-latest
+    outputs:
+      nginx_tags: ${{ steps.nginx.outputs.tags }}
+    steps:
+      - name: Find latest nginx release tags
+        id: nginx
+        uses: hakwerk/gha-git-repo-tags@main
+        with:
+          repository: nginx/nginx
+          limit: 5
+          reverse: true
 
-  - name: Run my Action
-    id: run-action
-    uses: actions/javascript-action@v1 # Commit with the `v1` tag
-    with:
-      milliseconds: 1000
+  prepare:
+    needs: get_tags
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nginx_tag: ${{ fromJson( needs.get_tags.outputs.nginx_tags ) }}
+        platform:
+          - linux/amd64
+          - linux/arm64
 
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.run-action.outputs.time }}"
+    steps:
+      - name: debug
+        run: echo ${{ matrix.nginx_tag }}
+      - name: debug
+        run: echo ${{ matrix.platform }}
 ```
-
-TODO
 
 ## References
 
-- https://github.com/actions/javascript-action
-- https://github.com/oprypin/find-latest-tag
+- <https://github.com/actions/javascript-action> - template used for this action
+- <https://github.com/oprypin/find-latest-tag> - action on which this action is
+  heavily based

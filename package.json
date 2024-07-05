@@ -1,21 +1,23 @@
 {
-  "name": "javascript-action",
-  "description": "GitHub Actions JavaScript Template",
-  "version": "0.0.0",
-  "author": "",
+  "name": "gha-git-repo-tags",
+  "description": "GitHub Action to get last N tags from a repository",
+  "version": "v1",
+  "author": "hakwerk",
   "private": true,
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/hakwerk/gha-git-repo-tags",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git+https://github.com/hakwerk/gha-git-repo-tags.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/hakwerk/gha-git-repo-tags/issues"
   },
   "keywords": [
     "GitHub",
     "Actions",
-    "JavaScript"
+    "JavaScript",
+    "Repository",
+    "Tags"
   ],
   "exports": {
     ".": "./dist/index.js"
@@ -73,7 +75,7 @@
     "@babel/preset-env": "^7.24.7",
     "@vercel/ncc": "^0.38.1",
     "babel-preset-jest": "^29.6.3",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.0 <9.0.0",
     "eslint-plugin-github": "^5.0.1",
     "eslint-plugin-jest": "^28.6.0",
     "jest": "^29.7.0",

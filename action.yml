@@ -27,7 +27,7 @@ inputs:
 outputs:
   tags:
     description:
-      'The full tag names (incl. prefix) that were found up to the limit'
+      'List of the full tag names (incl. prefix) that were found up to the limit'
 
 runs:
   using: node20
