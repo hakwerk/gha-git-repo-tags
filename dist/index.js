@@ -29216,7 +29216,8 @@ async function run() {
       (core.getInput('releases-only') || 'false').toLowerCase() === 'true'
     const prefix = core.getInput('prefix') || ''
     const regex = core.getInput('regex') || null
-    const reverse = core.getBooleanInput('reverse')
+    const reverse =
+      (core.getInput('reverse') || 'false').toLowerCase() === 'true'
 
     core.setOutput(
       'tags',
@@ -29235,7 +29236,7 @@ async function run() {
   }
 }
 
-const octokit = github.getOctokit({ token: core.getInput('token') || null })
+const octokit = github.getOctokit({ auth: core.getInput('token') })
 
 async function getLatestTags(
   owner,
@@ -29247,9 +29248,8 @@ async function getLatestTags(
   reverse
 ) {
   const endpoint = releasesOnly
-    ? octokit.repos.listReleases
-    : octokit.repos.listTags
-
+    ? octokit.rest.repos.listReleases
+    : octokit.rest.repos.listTags
   const pages = endpoint.endpoint.merge({
     owner,
     repo,

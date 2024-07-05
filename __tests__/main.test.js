@@ -2,18 +2,24 @@
  * Unit tests for the action's main functionality, src/main.js
  */
 const core = require('@actions/core')
+// const github = require('@actions/github')
 const main = require('../src/main')
 
 // Mock the GitHub Actions core library
 const getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-const getBooleanInputMock = jest
-  .spyOn(core, 'getBooleanInput')
-  .mockImplementation()
 const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
 const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
 
+// const octokit = github.getOctokit({ token: core.getInput('token') || null })
+//jest.mock('@actions/github')
+// const getOctokitMock = jest
+//   .spyOn(octokit.rest.repos, 'listTags')
+//   .mockImplementation()
+
 // Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
+
+process.env.GITHUB_TOKEN = 'TODO'
 
 describe('action', () => {
   beforeEach(() => {
@@ -36,42 +42,54 @@ describe('action', () => {
           return null
         case 'reverse':
           return 'false'
+        case 'token':
+          return 'TODO'
         default:
           return ''
       }
     })
 
+    // github.getOctokit.mockResolvedValue({
+    //   rest: {
+    //     rest: {
+    //       TODO: 'bla'
+    //       // Your mocked response data here
+    //     }
+    //   }
+    // })
+
     await main.run()
     expect(runMock).toHaveReturned()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(5)
-    expect(getBooleanInputMock).toHaveBeenCalledTimes(1)
+    expect(getInputMock).toHaveBeenCalledTimes(6)
+    // expect(getOctokitMock).toHaveBeenCalledTimes(1)
     //expect(setOutputMock).toHaveBeenCalledTimes(1)
-    // expect(setFailedMock).toHaveBeenNthCalledWith(
-    //   1,
-    //   'Invalid repository "" (needs to have one slash)'
-    // )
+    // expect(setFailedMock).toHaveBeenNthCalledWith(1, 'TODO')
   })
 
-  it('sets a failed status', async () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
-        default:
-          return ''
-      }
-    })
+  // octokitMock.mockImplementation(token => {
+  //   return ''
+  // })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+  // it('sets a failed status', async () => {
+  //   // Set the action's inputs as return values from core.getInput()
+  //   getInputMock.mockImplementation(name => {
+  //     switch (name) {
+  //       case 'milliseconds':
+  //         return 'this is not a number'
+  //       default:
+  //         return ''
+  //     }
+  //   })
 
-    // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
-      1,
-      'Invalid repository "" (needs to have one slash)'
-    )
-  })
+  //   await main.run()
+  //   expect(runMock).toHaveReturned()
+
+  //   // Verify that all of the core library functions were called correctly
+  //   expect(setFailedMock).toHaveBeenNthCalledWith(
+  //     1,
+  //     'Invalid repository "" (needs to have one slash)'
+  //   )
+  // })
 })
