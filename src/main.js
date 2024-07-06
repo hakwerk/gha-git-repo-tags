@@ -2,6 +2,7 @@
 //
 const core = require('@actions/core')
 const github = require('@actions/github')
+const _ = require('lodash')
 
 /**
  * The main function for the action.
@@ -73,7 +74,8 @@ async function getLatestTags(
     if (!tag.startsWith(prefix)) {
       continue
     }
-    if (regex && !new RegExp(regex).test(tag)) {
+    const safeRegex = _.escapeRegExp(regex)
+    if (safeRegex && !new RegExp(safeRegex).test(tag)) {
       continue
     }
     tags.push(tag)

@@ -14,7 +14,7 @@ GitHub Action to get last N tags from a repository.
 - `limit`: Number of tags to return (required, default: `10`)
 - `releases-only`: Consider only tags that have an associated release
 - `prefix`: Consider only tags starting with this string prefix
-- `regex`: Consider only tags that matches specified RegEx pattern
+- `regex`: Consider only tags that matches specified regular expression pattern
 - `reverse`: Reverse the order of the tags returned (oldest first)
 - `token`: Personal access token (auto-populated). It is used only because
   anonymous requests are rate-limited. It can be overridden to an empty value
