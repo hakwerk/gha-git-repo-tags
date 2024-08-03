@@ -1,3 +1,5 @@
+/*eslint space-before-function-paren: ["error", "never"]*/
+
 // This basically is https://github.com/oprypin/find-latest-tag/blob/master/index.js but modernized and with a few tweaks
 //
 const core = require('@actions/core')
