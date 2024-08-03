@@ -1,5 +1,3 @@
-/*eslint space-before-function-paren: ["error", "never"]*/
-
 // This basically is https://github.com/oprypin/find-latest-tag/blob/master/index.js but modernized and with a few tweaks
 //
 const core = require('@actions/core')
@@ -72,7 +70,7 @@ async function getLatestTags(
 
   const tags = []
   for await (const item of getItemsFromPages(octokit, pages)) {
-    const tag = releasesOnly ? item['tag_name'] : item['name']
+    const tag = releasesOnly ? item.tag_name : item.name
     if (!tag.startsWith(prefix)) {
       continue
     }
