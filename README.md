@@ -1,4 +1,4 @@
-# GitHub Action: git repository tags
+# GitHub Action: Git repository tags
 
 [![GitHub Super-Linter](https://github.com/hakwerk/gha-git-repo-tags/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/hakwerk/gha-git-repo-tags/actions/workflows/ci.yml/badge.svg)
