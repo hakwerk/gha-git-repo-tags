@@ -8,7 +8,7 @@ const _ = require('lodash')
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run() {
+async function run () {
   try {
     const repository = core.getInput('repository', { required: true })
     const repoParts = repository.split('/')
@@ -49,7 +49,7 @@ async function run() {
   }
 }
 
-async function getLatestTags(
+async function getLatestTags (
   octokit,
   owner,
   repo,
@@ -102,7 +102,7 @@ async function getLatestTags(
   return latestTags
 }
 
-async function* getItemsFromPages(octokit, pages) {
+async function * getItemsFromPages (octokit, pages) {
   for await (const page of octokit.paginate.iterator(pages)) {
     for (const item of page.data) {
       yield item
