@@ -1,39 +1,39 @@
-name: 'gha-git-repo-tags'
-description: 'GitHub Action to get last N tags from a repository'
-author: 'hakwerk <github@hakwerk.com>'
+name: gha-git-repo-tags
+description: GitHub Action to get last N tags from a repository
+author: hakwerk <github@hakwerk.com>
 
 inputs:
   repository:
-    description: 'Repository name with owner, e.g. actions/checkout'
+    description: Repository name with owner, e.g. actions/checkout
     required: true
   limit:
-    description: 'Number of tags to return'
+    description: Number of tags to return
     required: true
     default: '10'
   releases-only:
-    description: 'Consider only tags that have an associated release'
+    description: Consider only tags that have an associated release
   prefix:
-    description: 'Consider only tags starting with this string prefix'
+    description: Consider only tags starting with this string prefix
   regex:
     description:
-      'Consider only tags that matches specified regular expression pattern'
+      Consider only tags that matches specified regular expression pattern
   reverse:
-    description: 'Reverse the order of the tags returned (oldest first)'
+    description: Reverse the order of the tags returned (oldest first)
   token:
     description:
-      'Personal access token (auto-populated). It is used only because anonymous
-      requests are rate-limited. It can be overridden to an empty value'
+      Personal access token (auto-populated). It is used only because anonymous
+      requests are rate-limited. It can be overridden to an empty value
     default: ${{ github.token }}
 
 outputs:
   tags:
     description:
-      'List of the full tag names (incl. prefix) that were found up to the limit'
+      List of the full tag names (incl. prefix) that were found up to the limit
 
 runs:
   using: node20
   main: dist/index.js
 
 branding:
-  icon: 'tag'
-  color: 'orange'
+  icon: tag
+  color: orange
