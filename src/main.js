@@ -1,14 +1,14 @@
 // This basically is https://github.com/oprypin/find-latest-tag/blob/master/index.js but modernized and with a few tweaks
 //
-const core = require('@actions/core')
-const github = require('@actions/github')
-const _ = require('lodash')
+import * as core from '@actions/core'
+import github from '@actions/github'
+import _ from 'lodash'
 
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function run() {
+export async function run() {
   try {
     const repository = core.getInput('repository', { required: true })
     const repoParts = repository.split('/')
@@ -45,7 +45,7 @@ async function run() {
       )
     )
   } catch (error) {
-    core.setFailed(error.message)
+    if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
@@ -108,8 +108,4 @@ async function* getItemsFromPages(octokit, pages) {
       yield item
     }
   }
-}
-
-module.exports = {
-  run
 }

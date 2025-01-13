@@ -3,25 +3,29 @@
  *
  * Do not forget to run `export GITHUB_TOKEN=....` before running `npm run all` or `npx jest`!
  */
-const core = require('@actions/core')
-const main = require('../src/main')
+import { jest } from '@jest/globals'
+import * as core from '../__fixtures__/core.js'
 
-// Mock the GitHub Actions core library
-const getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
-const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+// Mocks should be declared before the module being tested is imported.
+jest.unstable_mockModule('@actions/core', () => core)
 
-// Mock the action's main function
-const runMock = jest.spyOn(main, 'run')
+// The module being tested should be imported dynamically. This ensures that the
+// mocks are used in place of any actual dependencies.
+const { run } = await import('../src/main.js')
 
-describe('action', () => {
+describe('main.js', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    // Set the action's inputs as return values from core.getInput().
+    core.getInput.mockImplementation(() => '500')
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
   })
 
   it('gets the repository tags', async () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'repository':
           return 'VegetableGarden/beet'
@@ -42,13 +46,12 @@ describe('action', () => {
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(7)
+    expect(core.getInput).toHaveBeenCalledTimes(7)
 
-    expect(setOutputMock).toHaveBeenNthCalledWith(1, 'tags', [
+    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'tags', [
       '0.0.26',
       '0.0.25',
       '0.0.24',
@@ -60,7 +63,7 @@ describe('action', () => {
 
   it('gets the releases only', async () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'repository':
           return 'VegetableGarden/beet'
@@ -81,13 +84,12 @@ describe('action', () => {
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(7)
+    expect(core.getInput).toHaveBeenCalledTimes(7)
 
-    expect(setOutputMock).toHaveBeenNthCalledWith(1, 'tags', [
+    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'tags', [
       '0.0.3',
       '0.0.2',
       '0.0.1'
@@ -96,18 +98,17 @@ describe('action', () => {
 
   it('sets a failed status', async () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         default:
           return ''
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(setFailedMock).toHaveBeenNthCalledWith(
+    expect(core.setFailed).toHaveBeenNthCalledWith(
       1,
       'Invalid repository "" (needs to have one slash)'
     )
@@ -115,7 +116,7 @@ describe('action', () => {
 
   it('uses a prefix', async () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'repository':
           return 'dawidd6/action-get-tag'
@@ -132,13 +133,12 @@ describe('action', () => {
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(7)
+    expect(core.getInput).toHaveBeenCalledTimes(7)
 
-    expect(setOutputMock).toHaveBeenNthCalledWith(1, 'tags', [
+    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'tags', [
       'v1.0.0',
       'v1.1.0'
     ])
@@ -146,7 +146,7 @@ describe('action', () => {
 
   it('uses a regex', async () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'repository':
           return 'VegetableGarden/beet'
@@ -163,13 +163,12 @@ describe('action', () => {
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(7)
+    expect(core.getInput).toHaveBeenCalledTimes(7)
 
-    expect(setFailedMock).toHaveBeenNthCalledWith(
+    expect(core.setFailed).toHaveBeenNthCalledWith(
       1,
       'The repository "VegetableGarden/beet" has no releases'
     )
@@ -177,7 +176,7 @@ describe('action', () => {
 
   it('has no releases', async () => {
     // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => {
+    core.getInput.mockImplementation((name) => {
       switch (name) {
         case 'repository':
           return 'VegetableGarden/beet'
@@ -194,13 +193,12 @@ describe('action', () => {
       }
     })
 
-    await main.run()
-    expect(runMock).toHaveReturned()
+    await run()
 
     // Verify that all of the core library functions were called correctly
-    expect(getInputMock).toHaveBeenCalledTimes(7)
+    expect(core.getInput).toHaveBeenCalledTimes(7)
 
-    expect(setFailedMock).toHaveBeenNthCalledWith(
+    expect(core.setFailed).toHaveBeenNthCalledWith(
       1,
       'The repository "VegetableGarden/beet" has no tags matching "release*"'
     )
