@@ -23,7 +23,7 @@
     ".": "./dist/index.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "scripts": {
     "bundle": "npm run format:write && npm run package",
@@ -58,6 +58,7 @@
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.8.0",
     "prettier-eslint": "^16.4.2",
-    "rollup": "^4.55.1"
+    "rollup": "^4.55.1",
+    "undici": "^7.18.2"
   }
 }
