@@ -42,7 +42,7 @@
   "dependencies": {
     "@actions/core": "^2.0.2",
     "@actions/github": "^7.0.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.23"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.1",
