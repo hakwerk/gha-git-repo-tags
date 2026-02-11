@@ -1,7 +1,7 @@
 // This basically is https://github.com/oprypin/find-latest-tag/blob/master/index.js but modernized and with a few tweaks
 //
 import * as core from '@actions/core'
-import github from '@actions/github'
+import * as github from '@actions/github'
 import _ from 'lodash'
 
 /**
