@@ -45,9 +45,9 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.2",
+    "@eslint/compat": "^2.0.3",
     "@jest/globals": "^30.2.0",
-    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
