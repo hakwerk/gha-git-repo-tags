@@ -58,7 +58,7 @@
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.9.10",
     "prettier-eslint": "^17.1.2",
-    "rollup": "^4.65.1",
-    "undici": "^8.12.3"
+    "rollup": "^4.67.5",
+    "undici": "^8.12.4"
   }
 }
